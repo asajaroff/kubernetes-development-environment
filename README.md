@@ -74,3 +74,6 @@ minikube start -p ${PROFILE} \
 		--addons ingress storage-provisioner default-storageclass
 minikube addons enable ingress
 ```
+
+## Deploying apps
+Helm based installs are recommended.

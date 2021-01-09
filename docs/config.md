@@ -18,7 +18,6 @@ minikube config set memory 4000
 [//]: # (Averiguar bien que es el driver y como interactua con minikube y las VMs)
 
 ### Driver 
-If we're opting to use a container engine instead of a 
 ### Container Runtime
 Defaults to [docker's container runtime](https://www.docker.com/products/container-runtime), but a few options are available:
 * `cri-o`
@@ -30,37 +29,44 @@ minikube config set container-runtime containerd
 ```
 
 ## Addons
-Minikube provides a few addons 
+Minikube provides two addons by default:
+* `default-storageclass`
+* `storage-provisioner`
+
+If you create your cluster using `make create`, then you've already got Ingress support. If you have created your cluster manually and you want to enable Ingress you must run:
 ```bash
-|-----------------------------|----------|--------------|
-|         ADDON NAME          | PROFILE  |    STATUS    |
-|-----------------------------|----------|--------------|
-| ambassador                  | minikube | disabled     |
-| csi-hostpath-driver         | minikube | disabled     |
-| dashboard                   | minikube | disabled     |
-| default-storageclass        | minikube | enabled ✅   |
-| efk                         | minikube | disabled     |
-| freshpod                    | minikube | disabled     |
-| gcp-auth                    | minikube | disabled     |
-| gvisor                      | minikube | disabled     |
-| helm-tiller                 | minikube | disabled     |
-| ingress                     | minikube | disabled     |
-| ingress-dns                 | minikube | disabled     |
-| istio                       | minikube | disabled     |
-| istio-provisioner           | minikube | disabled     |
-| kubevirt                    | minikube | disabled     |
-| logviewer                   | minikube | disabled     |
-| metallb                     | minikube | disabled     |
-| metrics-server              | minikube | disabled     |
-| nvidia-driver-installer     | minikube | disabled     |
-| nvidia-gpu-device-plugin    | minikube | disabled     |
-| olm                         | minikube | disabled     |
-| pod-security-policy         | minikube | disabled     |
-| registry                    | minikube | disabled     |
-| registry-aliases            | minikube | disabled     |
-| registry-creds              | minikube | disabled     |
-| storage-provisioner         | minikube | enabled ✅   |
-| storage-provisioner-gluster | minikube | disabled     |
-| volumesnapshots             | minikube | disabled     |
-|-----------------------------|----------|--------------|
+minikube addons enable ingress
+```
+To list all available addons, run `minikube addons list`
+```
+$ minikube addons list -p k8s-dev-env -o json | jq -r '. |= keys'
+[
+  "ambassador",
+  "csi-hostpath-driver",
+  "dashboard",
+  "default-storageclass",
+  "efk",
+  "freshpod",
+  "gcp-auth",
+  "gvisor",
+  "helm-tiller",
+  "ingress",
+  "ingress-dns",
+  "istio",
+  "istio-provisioner",
+  "kubevirt",
+  "logviewer",
+  "metallb",
+  "metrics-server",
+  "nvidia-driver-installer",
+  "nvidia-gpu-device-plugin",
+  "olm",
+  "pod-security-policy",
+  "registry",
+  "registry-aliases",
+  "registry-creds",
+  "storage-provisioner",
+  "storage-provisioner-gluster",
+  "volumesnapshots"
+]
 ```
