@@ -59,5 +59,18 @@ minikube config set container-runtime  ${RUNTIME}
 ## 
 
 ## Creating a basic cluster
+```
+minikube start
+```
 
 ## Creating a more complex cluster
+This is a more complex example with a multi node setup running containerd and calico:
+```bash
+minikube start -p ${PROFILE} \
+  		--nodes ${NODES} \
+		--kubernetes-version ${K8S_VERSION} \ # In the form v1.20.0
+		--cni ${CNI} \
+		--delete-on-failure true \
+		--addons ingress storage-provisioner default-storageclass
+minikube addons enable ingress
+```
