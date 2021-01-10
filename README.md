@@ -56,7 +56,48 @@ minikube config set kubernetes-version ${K8S_VERSION}
 minikube config set container-runtime  ${RUNTIME}
 ```
 
-## 
+## Setup
+### Install ArgoCD
+```
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+```
+Wait a few minutes for ArgoCD to bootstrap. Can check progress with `kubectl get pods --watch -n argocd`.
+
+Get the admin password:
+```bash
+kubectl get secrets -n argocd argocd-secret -o json | jq -r '.data."admin.password"' | base64 -d
+```
+
+Patch the ArgoCD deployment to be of NodePort type:
+```bash
+kubectl patch
+```
+
+Create an Ingress resource with the following configuration:
+```yaml
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: argocd-server-ingress
+  namespace: argocd
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+spec:
+  rules:
+  - host: argocd.example.com
+    http:
+      paths:
+      - backend:
+          serviceName: argocd-server
+          servicePort: https
+
+```
+
+### Install Argo Workflows
+More extensive details provided in the [setup document](docs/setup.md).
 
 ## Creating a basic cluster
 ```
